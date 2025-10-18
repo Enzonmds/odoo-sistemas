@@ -1,0 +1,17 @@
+# --- SECRETOS Y CREDENCIALES ---
+# ¡NUNCA SUBAS TU API KEY!
+certbot/cdmon.ini
+
+# --- DATOS DE SERVICIOS ---
+# Ignorar la base de datos completa
+postgresql/data/
+
+# Ignorar los certificados SSL generados
+certbot/conf/
+
+# Ignorar los archivos de desafío de Let's Encrypt
+certbot/www/
+
+# --- ARCHIVOS DE SISTEMA OPERATIVO ---
+.DS_Store
+Thumbs.db

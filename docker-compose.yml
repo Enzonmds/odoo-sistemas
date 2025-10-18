@@ -1,0 +1,70 @@
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=odoo-sistemas
+      - POSTGRES_PASSWORD=odoo_test_password # Usamos la clave simple que funcionó
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    networks:
+      - odoo-net
+
+  odoo:
+    image: odoo:19.0
+    restart: always
+    depends_on:
+      - db
+    ports: # <--- ¡CAMBIO CLAVE!
+      - "8069:8069" # Exponemos el puerto de Odoo a tu localhost
+    environment:
+      - HOST=db
+      - USER=odoo-sistemas
+      - PASSWORD=odoo_test_password # Usamos la clave simple que funcionó
+      - ODOO_MASTER_PASSWORD=Mstr_CGE_Adm1n_!P0w3r # Mantenemos la maestra
+    volumes:
+      - ./odoo/addons:/mnt/extra-addons
+      - ./odoo/etc:/etc/odoo
+    networks:
+      - odoo-net
+
+# --- SECCIÓN DE PRODUCCIÓN (GUARDADA PARA MÁS TARDE) ---
+#
+#  nginx:
+#    image: nginx:latest
+#    restart: always
+#    depends_on:
+#      - odoo
+#    ports:
+#      - "8080:80"
+#      - "8443:443"
+#    volumes:
+#      - ./nginx/conf.d:/etc/nginx/conf.d
+#      - ./certbot/conf:/etc/letsencrypt
+#      - ./certbot/www:/var/www/certbot
+#    networks:
+#      - odoo-net
+#
+#  certbot:
+#    build: ./certbot
+#    volumes:
+#      - ./certbot/conf:/etc/letsencrypt
+#      - ./certbot/cdmon.ini:/etc/letsencrypt/cdmon.ini:ro
+#    command:
+#      - "certonly"
+#      - "--authenticator"
+#      - "dns-cdmon"
+#      - "--dns-cdmon-credentials"
+#      - "/etc/letsencrypt/cdmon.ini"
+#      - "--non-interactive"
+#      - "--agree-tos"
+#      - "--email"
+#      - "sistemas@cge.mil.ar"
+#      - "--domain"
+#      - "soporte.cge.mil.ar"
+#      - "--staging"
+
+networks:
+  odoo-net:
+    driver: bridge

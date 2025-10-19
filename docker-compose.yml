@@ -12,12 +12,12 @@ services:
       - odoo-net
 
   odoo:
-    image: odoo:19.0
+    image: odoo:18.0
     restart: always
     depends_on:
       - db
-    ports: # <--- ¡CAMBIO CLAVE!
-      - "8069:8069" # Exponemos el puerto de Odoo a tu localhost
+    ports:
+      - "8069:8069"
     environment:
       - HOST=db
       - USER=odoo-sistemas
@@ -25,6 +25,7 @@ services:
       - ODOO_MASTER_PASSWORD=Mstr_CGE_Adm1n_!P0w3r # Mantenemos la maestra
     volumes:
       - ./odoo/addons:/mnt/extra-addons
+      - ./oca-addons:/mnt/oca-addons
       - ./odoo/etc:/etc/odoo
     networks:
       - odoo-net

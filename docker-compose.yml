@@ -27,6 +27,7 @@ services:
       - ./odoo/addons:/mnt/extra-addons
       - ./oca-addons:/mnt/oca-addons
       - ./odoo/etc:/etc/odoo
+      - ./odoo/filestore:/var/lib/odoo
     networks:
       - odoo-net
 
